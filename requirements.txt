@@ -1,5 +1,5 @@
-transformers
-sentencepiece
-torch
-sentence-transformers
 streamlit
+transformers
+sentence-transformers
+torch
+langdetect
