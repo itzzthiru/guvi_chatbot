@@ -1,36 +1,45 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from langdetect import detect, DetectorFactory
+
+DetectorFactory.seed = 0
 
 class Translator:
     def __init__(self):
         self.model_name = "facebook/nllb-200-distilled-600M"
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, use_fast=False)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(self.model_name)
 
-        self.language_map = {
-            "English": "eng_Latn",
-            "Hindi": "hin_Deva",
-            "Tamil": "tam_Taml",
-            "Telugu": "tel_Telu",
-            "Bengali": "ben_Beng",
-            "Kannada": "kan_Knda",
-            "Malayalam": "mal_Mlym",
-            "Marathi": "mar_Deva",
-            "Gujarati": "guj_Gujr",
-            "Punjabi": "pan_Guru",
-            "Urdu": "urd_Arab"
+        # Language mapping
+        self.lang_code_map = {
+            'af': 'afr_Latn', 'ar': 'arb_Arab', 'bn': 'ben_Beng', 'en': 'eng_Latn',
+            'es': 'spa_Latn', 'fr': 'fra_Latn', 'gu': 'guj_Gujr', 'hi': 'hin_Deva',
+            'id': 'ind_Latn', 'it': 'ita_Latn', 'ja': 'jpn_Jpan', 'kn': 'kan_Knda',
+            'ko': 'kor_Hang', 'ml': 'mal_Mlym', 'mr': 'mar_Deva', 'ne': 'npi_Deva',
+            'nl': 'nld_Latn', 'pa': 'pan_Guru', 'pt': 'por_Latn', 'ru': 'rus_Cyrl',
+            'ta': 'tam_Taml', 'te': 'tel_Telu', 'tr': 'tur_Latn', 'ur': 'urd_Arab',
+            'zh': 'zho_Hans', 'zh-cn': 'zho_Hans'
         }
 
-    def translate(self, text: str, src_lang: str, tgt_lang: str) -> str:
-        if src_lang not in self.language_map or tgt_lang not in self.language_map:
-            raise ValueError("Unsupported language")
+    def detect_lang_code(self, text):
+        try:
+            lang = detect(text).lower()
+            return self.lang_code_map.get(lang, 'eng_Latn')
+        except:
+            return 'eng_Latn'
 
-        src_code = self.language_map[src_lang]
-        tgt_code = self.language_map[tgt_lang]
+    def lang_token_id(self, code):
+        return self.tokenizer.convert_tokens_to_ids(code)
 
-        self.tokenizer.src_lang = src_code
-        encoded = self.tokenizer(text, return_tensors="pt")
-        generated_tokens = self.model.generate(
-            **encoded,
-            forced_bos_token_id=self.tokenizer.convert_tokens_to_ids(tgt_code)
-        )
-        return self.tokenizer.decode(generated_tokens[0], skip_special_tokens=True)
+    def translate_to_english(self, text):
+        src_lang = self.detect_lang_code(text)
+        self.tokenizer.src_lang = src_lang
+        inputs = self.tokenizer(text, return_tensors="pt")
+        output = self.model.generate(**inputs, forced_bos_token_id=self.lang_token_id("eng_Latn"))
+        translated = self.tokenizer.decode(output[0], skip_special_tokens=True)
+        return translated, src_lang
+
+    def translate_from_english(self, text, target_lang_code):
+        self.tokenizer.src_lang = "eng_Latn"
+        inputs = self.tokenizer(text, return_tensors="pt")
+        output = self.model.generate(**inputs, forced_bos_token_id=self.lang_token_id(target_lang_code))
+        return self.tokenizer.decode(output[0], skip_special_tokens=True)
