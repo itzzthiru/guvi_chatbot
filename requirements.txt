@@ -1,1 +1,5 @@
-
+transformers
+sentencepiece
+torch
+sentence-transformers
+streamlit
