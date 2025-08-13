@@ -31,4 +31,5 @@ A smart chatbot for answering GUVI-related FAQs in **multiple languages**. This 
 ---
 
 ### App Link Here :https://huggingface.co/spaces/thiru43/guvi_chatbot
+### Linkedin demo video link:https://www.linkedin.com/posts/thirukumaran-undefined-8b336b352_project-title-guvi-multilingual-chatbot-activity-7361438830962323458-1hSl?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFf5eUcBIVM5jB52tTRYrgFrPIkAA2pI4tM
 
