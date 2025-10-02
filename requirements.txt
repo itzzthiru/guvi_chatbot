@@ -1,0 +1,6 @@
+streamlit==1.37.1
+transformers==4.42.4
+sentence-transformers==3.0.1
+torch==2.2.2     # CPU wheel installs fine on Spaces
+accelerate==0.33.0
+langdetect==1.0.9
