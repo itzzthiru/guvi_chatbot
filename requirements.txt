@@ -1,6 +1,8 @@
-streamlit==1.37.1
-transformers==4.42.4
-sentence-transformers==3.0.1
-torch==2.2.2     # CPU wheel installs fine on Spaces
-accelerate==0.33.0
+streamlit>=1.28.0
+transformers==4.37.2
+torch==2.2.2
 langdetect==1.0.9
+sentencepiece==0.1.99
+requests>=2.31.0
+python-dotenv==1.0.1
+sentence-transformers>=2.2.2

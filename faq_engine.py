@@ -37,7 +37,7 @@ class FAQEngine:
         # store on CPU to avoid GPU memory pressure
         return self._mean_pooling(output, encoded["attention_mask"]).cpu()
 
-    def get_answer(self, user_question: str) -> str:
+    def get_answer(self, user_question: str) -> str:  # Removed top_k parameter
         query_emb = self._encode([user_question])[0]
         sims = F.cosine_similarity(query_emb.unsqueeze(0), self.question_embeddings)
         best_idx = torch.argmax(sims).item()

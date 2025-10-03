@@ -1,4 +1,3 @@
-# chatbot.py
 from translator import Translator
 from faq_engine import FAQEngine
 from guvi_engine import GuviEngine
@@ -16,22 +15,22 @@ class Chatbot:
         # Step 1: Translate input to English
         translated_input, lang_code = self.translator.translate_to_english(user_input)
 
-        # Step 2: Search FAQ
-        faq_results = self.faq_engine.get_answer(translated_input, top_k=top_k)
+        # Step 2: Search FAQ - fixed method call
+        faq_answer = self.faq_engine.get_answer(translated_input)
 
-        # Step 3: Search GUVI text
-        guvi_results = self.guvi_engine.search(translated_input, top_k=top_k)
+        # Step 3: Search GUVI text - fixed method call
+        guvi_match = self.guvi_engine.get_best_match(translated_input)
 
         # Step 4: Translate answers back to user language
         final_faq = []
-        for ans, score, src_q in faq_results:
-            translated_back = self.translator.translate_from_english(ans, lang_code)
-            final_faq.append((translated_back, score, src_q))
+        if faq_answer:
+            translated_back = self.translator.translate_from_english(faq_answer, lang_code)
+            final_faq.append((translated_back, 1.0, "FAQ"))
 
         final_guvi = []
-        for para, score in guvi_results:
-            translated_back = self.translator.translate_from_english(para, lang_code)
-            final_guvi.append((translated_back, score))
+        if guvi_match:
+            translated_back = self.translator.translate_from_english(guvi_match, lang_code)
+            final_guvi.append((translated_back, 1.0))
 
         return {
             "detected_lang_code": lang_code,
