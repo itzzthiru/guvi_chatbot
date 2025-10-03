@@ -12,12 +12,7 @@ A smart multilingual chatbot that answers questions about GUVI platform in multi
 
 ## 🚀 Live Demo
 
-- **Hugging Face Spaces**: [Your App Link]
-- **Demo Video**: [Your LinkedIn Post]
+- **Hugging Face Spaces**: https://huggingface.co/spaces/thiru43/guvi_chatbot
+- **Demo Video**: https://www.linkedin.com/posts/thirukumaran-undefined-8b336b352_project-title-guvi-multilingual-chatbot-activity-7361438830962323458-1hSl?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFf5eUcBIVM5jB52tTRYrgFrPIkAA2pI4tM
 
-## 🛠️ Installation
 
-```bash
-git clone https://github.com/itzzthiru/guvi_chatbot.git
-cd guvi_chatbot
-pip install -r requirements.txt
